@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TestFileRequest {
 	
-	private Integer id;
 	private MultipartFile mediaFile;
 	private String description;
 	

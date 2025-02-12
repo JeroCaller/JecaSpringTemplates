@@ -14,8 +14,17 @@ public enum CustomResponseCode {
 	
 	// 응답 상태 양호 코드 모음.
 	OK(HttpStatus.OK, "OK", "응답 성공"),
+	READ_SUCCESS(HttpStatus.OK, "READ_SUCCESS", "조회 성공"),
 	MEMBER_CREATED(HttpStatus.CREATED, "MEMBER_CREATED", "회원 가입 성공"),
+	MEMBER_UPDATED(HttpStatus.OK, "MEMBER_UPDATED", "회원 정보 수정 성공"),
+	MEMBER_DELETED(HttpStatus.OK, "MEMBER_DELETED", "회원 탈퇴 성공"),
 	FILE_CREATED(HttpStatus.CREATED, "FILE_CREATED", "파일 생성 성공"),
+	FILE_DELETED(HttpStatus.OK, "FILE_DELETED", "파일 삭제 성공"),
+	ONLY_SOME_FILE_DELETED(
+		HttpStatus.PARTIAL_CONTENT, 
+		"ONLY_SOME_FILE_DELETED", 
+		"요청 파일들 중 일부만 삭제되었습니다."
+	),
 	NO_FILE_TO_DELETE(HttpStatus.OK, "NO_FILE_TO_DELETE", "삭제할 파일이 없습니다."),
 	
 	// 에러 코드 모음.

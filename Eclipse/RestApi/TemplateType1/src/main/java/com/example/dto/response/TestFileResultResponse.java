@@ -22,5 +22,25 @@ public class TestFileResultResponse {
 	 * <파일 경로, 에러원인> 형태로 파일 업로드에 실패한 파일 정보를 기록한다.
 	 */
 	private Map<String, String> failedPaths = new HashMap<String, String>();
-
+	
+	public static enum FileResult {
+		ALL_SUCCESS, PARTIAL_SUCCESS, ALL_FAILED, NO_RESULT
+	}
+	
+	public FileResult getFileResult() {
+		
+		int s = succeededFileNames.size();
+		int f = failedPaths.size();
+		
+		if (s * f != 0) {
+			return FileResult.PARTIAL_SUCCESS;
+		} else if (s != 0) {
+			return FileResult.ALL_SUCCESS;
+		} else if (f != 0) {
+			return FileResult.ALL_FAILED;
+		} else {
+			return FileResult.NO_RESULT;
+		}
+	}
+	
 }
