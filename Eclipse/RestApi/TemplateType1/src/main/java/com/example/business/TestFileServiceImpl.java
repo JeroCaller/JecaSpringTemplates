@@ -46,8 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 파일 업로드 및 다운로드 서비스 계층 클래스.
- * 
- * TODO - 현재 인증된 회원을 기준으로 파일 업로드 및 다운로드 작업 하기. 
+ *  
  */
 @Service
 @RequiredArgsConstructor

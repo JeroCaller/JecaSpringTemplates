@@ -5,11 +5,12 @@ import org.springframework.http.HttpStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 응답 코드 모음. 원하는 대로 커스텀 가능.
+ */
 @Getter
 @AllArgsConstructor
 public enum CustomResponseCode {
-	
-	// 응답 코드 모음. 원하는 대로 커스텀 가능.
 	
 	// 응답 상태 양호 코드 모음.
 	OK(HttpStatus.OK, "OK", "응답 성공"),

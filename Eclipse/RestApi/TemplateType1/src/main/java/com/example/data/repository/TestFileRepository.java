@@ -21,12 +21,7 @@ public interface TestFileRepository
 	 * @param pageRequest
 	 * @return
 	 */
-	@Query("""
-		SELECT f
-		FROM TestFile f 
-		JOIN f.member m
-		WHERE m = :#{#member}
-	""")
+	@Query("SELECT f FROM TestFile f JOIN f.member m WHERE m = :#{#member}")
 	Page<TestFile> findAllByMember(
 		@Param("member") TestMember member, 
 		Pageable pageRequest
@@ -38,14 +33,7 @@ public interface TestFileRepository
 	 * @param member
 	 * @return
 	 */
-	@Query("""
-		SELECT f
-		FROM TestFile f
-		JOIN f.member m
-		WHERE m = :#{#member}
-	""")
-	List<TestFile> findAllByMember(
-		@Param("member") TestMember member
-	);
+	@Query("SELECT f FROM TestFile f JOIN f.member m WHERE m = :#{#member}")
+	List<TestFile> findAllByMember(@Param("member") TestMember member);
 
 }

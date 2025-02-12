@@ -39,11 +39,11 @@ public class PageUtil {
 	/**
 	 * 현재 Page의 개수가 0 또는 null인지 판별
 	 * 
-	 * @param <T>
+	 * @param <?>
 	 * @param pages
 	 * @return
 	 */
-	public static <T> boolean isEmtpy(Page<T> pages) {
+	public static boolean isEmtpy(Page<?> pages) {
 		return (pages == null || pages.getNumberOfElements() == 0);
 	}
 	

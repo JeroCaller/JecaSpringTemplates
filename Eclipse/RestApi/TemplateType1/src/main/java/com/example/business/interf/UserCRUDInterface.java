@@ -1,8 +1,5 @@
 package com.example.business.interf;
 
-import com.example.advice.annotation.AuthChecker;
-import com.example.advice.annotation.ExcludeFromAOP;
-
 /**
  * 유저 CRUD 인터페이스
  * 회원가입, 회원 탈퇴 등 유저(회원)와 관련된 작업을 위한 인터페이스
