@@ -1,5 +1,7 @@
 package com.example.data.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,6 +30,22 @@ public interface TestFileRepository
 	Page<TestFile> findAllByMember(
 		@Param("member") TestMember member, 
 		Pageable pageRequest
+	);
+	
+	/**
+	 * 특정 회원의 모든 파일 정보 조회.
+	 * 
+	 * @param member
+	 * @return
+	 */
+	@Query("""
+		SELECT f
+		FROM TestFile f
+		JOIN f.member m
+		WHERE m = :#{#member}
+	""")
+	List<TestFile> findAllByMember(
+		@Param("member") TestMember member
 	);
 
 }

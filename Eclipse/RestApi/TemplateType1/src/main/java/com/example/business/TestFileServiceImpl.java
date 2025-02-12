@@ -33,9 +33,11 @@ import com.example.exception.classes.FileInfoInDBNotDeletedException;
 import com.example.exception.classes.FileNotDeletedException;
 import com.example.exception.classes.FileNotFoundOrReadableException;
 import com.example.exception.classes.IORuntimeException;
+import com.example.exception.classes.NoFileToDeleteException;
 import com.example.exception.classes.TestFileNotFoundException;
 import com.example.exception.classes.TestOtherMemberFileAccessException;
 import com.example.util.AuthUtil;
+import com.example.util.ListUtil;
 import com.example.util.PageUtil;
 
 import jakarta.annotation.PostConstruct;
@@ -285,8 +287,48 @@ public class TestFileServiceImpl
 
 	@Override
 	public Object deleteAllFiles() {
-		// TODO Auto-generated method stub
-		return FileIOInterface.super.deleteAllFiles();
+		
+		TestFileResultResponse fileResult = new TestFileResultResponse();
+		
+		TestMember currentMember = (TestMember) AuthUtil.getCurrentUserInfo();
+		List<TestFile> files = testFileRepository.findAllByMember(currentMember);
+		
+		if (ListUtil.isEmpty(files)) {
+			throw new NoFileToDeleteException();
+		}
+		
+		for (TestFile file : files) {
+			Path filePath = Paths.get(file.getPath());
+			
+			// 먼저 서버 내에 물리적으로 존재하는 파일들을 모두 삭제한다.
+			try {
+				Files.deleteIfExists(filePath);
+			} catch (IOException e) {
+				// 다른 파일들의 삭제를 위해 
+				// 예외가 발생해도 다음 파일로 넘어가도록 함.
+				// 대신 실패한 파일 경로 및 원인을 기록.
+				fileResult.getFailedPaths().put(
+					filePath.toString(), 
+					"물리적 파일 삭제 실패. \n" + e.getMessage()
+				);
+				continue;
+			}
+			
+			// DB 내 해당 파일 정보 삭제
+			try {
+				testFileRepository.delete(file);
+			} catch (Exception e) {
+				fileResult.getFailedPaths().put(
+					filePath.toString(), 
+					"DB 삭제 실패.\n" + e.getMessage()
+				);
+				continue;
+			}
+			
+			fileResult.getSucceededFileNames().add(filePath.toString());
+		}
+		
+		return fileResult;
 	}
 
 }

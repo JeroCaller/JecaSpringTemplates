@@ -15,6 +15,7 @@ public enum CustomResponseCode {
 	OK(HttpStatus.OK, "OK", "응답 성공"),
 	MEMBER_CREATED(HttpStatus.CREATED, "MEMBER_CREATED", "회원 가입 성공"),
 	FILE_CREATED(HttpStatus.CREATED, "FILE_CREATED", "파일 생성 성공"),
+	NO_FILE_TO_DELETE(HttpStatus.OK, "NO_FILE_TO_DELETE", "삭제할 파일이 없습니다."),
 	
 	// 에러 코드 모음.
 	MEMBER_NOT_FOUND(
