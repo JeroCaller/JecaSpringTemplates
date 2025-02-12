@@ -26,6 +26,9 @@ public enum CustomResponseCode {
 		"요청 파일들 중 일부만 삭제되었습니다."
 	),
 	NO_FILE_TO_DELETE(HttpStatus.OK, "NO_FILE_TO_DELETE", "삭제할 파일이 없습니다."),
+	PRODUCT_CREATED(HttpStatus.CREATED, "PRODUCT_CREATED", "제품 데이터 생성 성공"),
+	PRODUCT_UPDATED(HttpStatus.OK, "PRODUCT_UPDATED", "제품 정보 업데이트 완료."),
+	PRODUCT_DELETED(HttpStatus.OK, "PRODUCT_DELETED", "제품 정보 삭제 완료."),
 	
 	// 에러 코드 모음.
 	MEMBER_NOT_FOUND(
@@ -54,6 +57,12 @@ public enum CustomResponseCode {
 		"FILE_INFO_NOT_DELETED",
 		"DB 내 파일 정보 삭제 실패."
 	),
+	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT_NOT_FOUND", "조회된 제품이 없습니다."),
+	PRODUCT_ALREADY_EXISTS(
+		HttpStatus.BAD_REQUEST, 
+		"PRODUCT_ALREADY_EXISTS", 
+		"똑같은 이름의 제품이 이미 존재합니다."
+	), 
 	NOT_AUTHENTICATED(
 		HttpStatus.UNAUTHORIZED, 
 		"NOT_AUTHENTICATED", 

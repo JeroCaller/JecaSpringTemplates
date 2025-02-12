@@ -54,6 +54,16 @@ public interface ReadInterface<RESP, BY> {
 	}
 	
 	/**
+	 * 특정 조건을 만족하는 모든 데이터들을 리스트 형태로 반환.
+	 * 
+	 * @param field - 조회하고자 하는 조건 데이터.
+	 * @return
+	 */
+	default List<RESP> getSomeInListBy(BY field) {
+		return null;
+	}
+	
+	/**
 	 * 조건에 맞는 데이터가 DB에 존재하는지 여부 반환.
 	 * 
 	 * @param field
