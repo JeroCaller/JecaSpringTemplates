@@ -1,8 +1,10 @@
 package com.example.business;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,19 +25,20 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class TestProductServiceImpl implements CRUDInterface<
-	TestProductServiceImpl, 
+@Primary
+public class TestProductServiceImpl implements CRUDInterface< 
 	TestProductResponse, 
 	TestProductRequest, 
+	Integer,
 	String
 > {
 	
 	private final TestProductRepository testProductRepository;
 	
 	@Override
-	public TestProductResponse getOne(String field) {
+	public TestProductResponse getOne(Integer field) {
 		
-		TestProduct product = testProductRepository.findByName(field)
+		TestProduct product = testProductRepository.findById(field)
 			.orElseThrow(() -> new TestProductNotFoundException());
 		
 		return TestProductResponse.toDto(product);
@@ -44,38 +47,7 @@ public class TestProductServiceImpl implements CRUDInterface<
 	@Override
 	public List<TestProductResponse> getAllInList() {
 		
-		List<TestProduct> allProducts = testProductRepository.findAll();
-		
-		if (ListUtil.isEmpty(allProducts)) {
-			throw new TestProductNotFoundException();
-		}
-		
-		return allProducts.stream()
-			.map(TestProductResponse :: toDto)
-			.collect(Collectors.toList());
-	}
-
-	@Override
-	public Page<TestProductResponse> getAllInPage(Pageable pageRequest) {
-		
-		Page<TestProduct> pagedProducts = testProductRepository.findAll(pageRequest);
-		
-		if (PageUtil.isEmtpy(pagedProducts)) {
-			throw new TestProductNotFoundException();
-		}
-		
-		return pagedProducts.map(TestProductResponse :: toDto);
-	}
-	
-	/**
-	 * 주어진 카테고리에 해당하는 모든 데이터 조회.
-	 * 
-	 * @param field - 카테고리명
-	 */
-	@Override
-	public List<TestProductResponse> getSomeInListBy(String field) {
-		
-		List<TestProduct> products = testProductRepository.findAllByCategory(field);
+		List<TestProduct> products = testProductRepository.findAll();
 		
 		if (ListUtil.isEmpty(products)) {
 			throw new TestProductNotFoundException();
@@ -85,12 +57,19 @@ public class TestProductServiceImpl implements CRUDInterface<
 			.map(TestProductResponse :: toDto)
 			.collect(Collectors.toList());
 	}
-	
-	/**
-	 * 주어진 카테고리명에 해당하는 모든 데이터를 페이징하여 조회. 
-	 * 
-	 * @param - 조회 기준이 되는 카테고리명.
-	 */
+
+	@Override
+	public Page<TestProductResponse> getAllInPage(Pageable pageRequest) {
+		
+		Page<TestProduct> products = testProductRepository.findAll(pageRequest);
+		
+		if (PageUtil.isEmtpy(products)) {
+			throw new TestProductNotFoundException();
+		}
+		
+		return products.map(TestProductResponse :: toDto);
+	}
+
 	@Override
 	public Page<TestProductResponse> getSomeInPageBy(
 		String field, Pageable pageRequest
@@ -107,58 +86,74 @@ public class TestProductServiceImpl implements CRUDInterface<
 	}
 
 	@Override
-	public boolean exists(String field) {
-		return testProductRepository.existsByName(field);
+	public List<TestProductResponse> getSomeInListBy(String field) {
+		
+		List<TestProduct> products = testProductRepository.findAllByCategory(field);
+		
+		if (ListUtil.isEmpty(products)) {
+			throw new TestProductNotFoundException();
+		}
+		
+		return products.stream()
+			.map(TestProductResponse :: toDto)
+			.collect(Collectors.toList());
 	}
-
+	
+	/**
+	 * 세 재품 등록. 
+	 * 이미 똑같은 이름의 제품이 있으면 예외 발생하면 제품 등록 진행 중단됨. 
+	 */
 	@Override
 	public TestProductResponse create(TestProductRequest request) {
 		
-		if (exists(request.getName())) {
+		Optional<TestProduct> checkProduct = testProductRepository
+			.findByName(request.getName());
+		if (checkProduct.isPresent()) {
 			throw new TestProductAlreadyExistsException();
 		}
 		
-		TestProduct newProduct = TestProduct.toEntity(request);
-		TestProduct savedProduct = testProductRepository.save(newProduct);
+		TestProduct targetProduct = TestProduct.toEntity(request);
+		TestProduct savedProduct = testProductRepository.save(targetProduct);
 		
 		return TestProductResponse.toDto(savedProduct);
 	}
-
+	
+	/**
+	 * 제품 정보 한 건 수정. 
+	 * 
+	 * 기존 DB 내 없는 데이터에 대해선 예외를 발생시키면서 종료됨. 
+	 * 새 데이터 생성을 원하면 create() 메서드를 대신 사용.
+	 */
 	@Override
 	public TestProductResponse update(TestProductRequest request) {
 		
-		TestProduct product = testProductRepository.findByName(request.getName())
-			.orElseThrow(() -> new TestProductNotFoundException());
-		
-		TestProduct willBeUpdatedProduct = TestProduct
-			.toUpdateEntity(request, product.getId());
-		
-		TestProduct updatedProduct = testProductRepository
-			.save(willBeUpdatedProduct);
+		Optional<TestProduct> checkProduct = testProductRepository
+			.findById(request.getId());
+		if (checkProduct.isEmpty()) {
+			throw new TestProductNotFoundException();
+		}
+				
+		TestProduct targetProduct = TestProduct.toUpdateEntity(request);
+		TestProduct updatedProduct = testProductRepository.save(targetProduct);
 		
 		return TestProductResponse.toDto(updatedProduct);
 	}
 
 	@Override
-	public Object deleteOneBy(String field) {
+	public Object deleteOneBy(Integer field) {
 		
-		testProductRepository.deleteByName(field);
-		
-		// 아무것도 반환하지 않는다. 
+		testProductRepository.deleteById(field);
+
+		// 반환값 없음.
 		return null;
 	}
-	
-	/**
-	 * 특정 카테고리에 부합하는 모든 데이터 삭제.
-	 * 
-	 * @param field - 삭제하고자 하는 카테고리명.
-	 */
+
 	@Override
 	public Object deleteSomeBy(String field) {
 		
 		testProductRepository.deleteAllByCategory(field);
 		
-		// 아무것도 반환하지 않는다. 
+		// 반환값 없음.
 		return null;
 	}
 
@@ -167,7 +162,7 @@ public class TestProductServiceImpl implements CRUDInterface<
 		
 		testProductRepository.deleteAll();
 		
-		// 아무것도 반환하지 않는다. 
+		// 반환값 없음.
 		return null;
 	}
 

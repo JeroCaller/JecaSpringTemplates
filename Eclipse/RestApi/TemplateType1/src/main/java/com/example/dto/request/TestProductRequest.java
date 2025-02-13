@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TestProductRequest {
 	
+	private Integer id;
+	
 	@NotBlank
 	@Size(min = 1, max = 30)
 	private String name;

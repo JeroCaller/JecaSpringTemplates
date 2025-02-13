@@ -10,8 +10,9 @@ import org.springframework.data.domain.Pageable;
  * 
  * @param <RESP> - 응답용 DTO 클래스.
  * @param <BY> - 조건 검색 데이터의 타입.
+ * @param <RANGE> - 한 범위 내 여러 레코드들을 조회하기 위한 조건 검색용 데이터의 타입.
  */
-public interface ReadInterface<RESP, BY> {
+public interface ReadInterface<RESP, BY, RANGE> {
 	
 	/**
 	 * 레코드 한 건 조회.
@@ -49,7 +50,7 @@ public interface ReadInterface<RESP, BY> {
 	 * @param pageRequest
 	 * @return
 	 */
-	default Page<RESP> getSomeInPageBy(BY field, Pageable pageRequest) {
+	default Page<RESP> getSomeInPageBy(RANGE field, Pageable pageRequest) {
 		return null;
 	}
 	
@@ -59,7 +60,7 @@ public interface ReadInterface<RESP, BY> {
 	 * @param field - 조회하고자 하는 조건 데이터.
 	 * @return
 	 */
-	default List<RESP> getSomeInListBy(BY field) {
+	default List<RESP> getSomeInListBy(RANGE field) {
 		return null;
 	}
 	

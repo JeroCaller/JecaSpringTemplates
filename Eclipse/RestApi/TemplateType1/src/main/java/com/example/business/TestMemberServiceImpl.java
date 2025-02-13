@@ -38,7 +38,7 @@ public class TestMemberServiceImpl implements UserCRUDInterface<
 	private final PasswordEncoder passwordEncoder;
 	private final CustomUserDetailsService customUserDetailsService;
 	private final FileIOInterface<
-		TestFileServiceImpl, TestFileResponse, TestFileRequest, Integer
+		TestFileServiceImpl, TestFileResponse, TestFileRequest, Integer, Integer
 	> fileService;
 	
 	@Override

@@ -52,10 +52,10 @@ public class TestProduct {
 			.build();
 	}
 	
-	public static TestProduct toUpdateEntity(TestProductRequest request, int id) {
+	public static TestProduct toUpdateEntity(TestProductRequest request) {
 		
 		return TestProduct.builder()
-			.id(id)
+			.id(request.getId())
 			.name(request.getName())
 			.category(request.getCategory())
 			.description(request.getDescription())

@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 클라이언트에 전송할 JSON 형태 응답 데이터와 매핑될 DTO 클래스.
@@ -41,6 +42,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Slf4j
 public class RestResponse {
 	
 	@Builder.Default
@@ -113,7 +115,7 @@ public class RestResponse {
 	 */
 	private MappingJacksonValue getFilteredData(DataResponse response) {
 		
-		SimpleBeanPropertyFilter filter = getFilter("validFailedMsg", "fileResult");
+		SimpleBeanPropertyFilter filter = getFilter(response, "validFailedMsg", "fileResult");
 		
 		// 앞서 정의한 필터를 등록.
 		FilterProvider filterProvider = new SimpleFilterProvider()
@@ -133,7 +135,10 @@ public class RestResponse {
 	 * @param exceptFieldNames
 	 * @return
 	 */
-	private SimpleBeanPropertyFilter getFilter(String... exceptFieldNames) {
+	private SimpleBeanPropertyFilter getFilter(
+		DataResponse response, 
+		String... exceptFieldNames
+	) {
 		
 		SimpleBeanPropertyFilter filter = null;
 		
@@ -147,10 +152,14 @@ public class RestResponse {
 			try {
 				field = DataResponse.class.getDeclaredField(fieldName);
 				field.setAccessible(true);  // private 필드에도 접근 허용.
-				fieldValue = field.get(fieldNamesList); // 필드에 할당된 값 가져오기.
+				fieldValue = field.get(response); // 필드에 할당된 값 가져오기.
+				//log.info("fieldValue: {}", fieldValue);
 			} catch (NoSuchFieldException | SecurityException | 
 					IllegalArgumentException | IllegalAccessException e) {
 				// 해당 필드가 없다고 간주하고 작업을 건너뛴다.
+				//log.info("필드값 추출 실패.");
+				//log.info(e.getClass().getName());
+				//log.info(e.getMessage());
 				continue;
 			}
 			
@@ -170,7 +179,11 @@ public class RestResponse {
 			}
 		}
 		
-		String[] fieldNames = (String[]) fieldNamesList.toArray();
+		//log.info("제외 대상 필드 개수: {}", fieldNamesList.size());
+		//log.info("제외 대상 필드 목록");
+		//log.info(ListUtil.toOneString(fieldNamesList, ", "));
+		
+		String[] fieldNames = fieldNamesList.toArray(new String[fieldNamesList.size()]);
 		filter = SimpleBeanPropertyFilter.serializeAllExcept(fieldNames);
 		
 		return filter;

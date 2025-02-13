@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @param <REQ> - 요청용 DTO 클래스.
  * @param <BY> - 조건 검색용 데이터의 타입. 
  */
-public interface FileIOInterface<Service, RESP, REQ, BY> extends ReadInterface<RESP, BY> {
+public interface FileIOInterface<Service, RESP, REQ, BY, RANGE> extends ReadInterface<RESP, BY, RANGE> {
 	
 	/**
 	 * 클라이언트로부터 넘어온 파일과 그 경로를 각각 서버 내 폴더 및 

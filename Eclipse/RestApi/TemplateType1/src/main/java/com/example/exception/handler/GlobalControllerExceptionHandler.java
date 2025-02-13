@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalControllerExceptionHandler {
 	
-	private HttpServletRequest httpRequest;
+	private final HttpServletRequest httpRequest;
 	
 	/**
 	 * 커스텀 예외 처리 메서드.

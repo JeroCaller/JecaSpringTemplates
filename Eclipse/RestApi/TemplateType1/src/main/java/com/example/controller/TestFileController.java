@@ -37,7 +37,7 @@ public class TestFileController {
 		TestFileServiceImpl, 
 		TestFileResponse,
 		TestFileRequest, 
-		Integer
+		Integer, Integer
 	> fileService;
 	
 	@GetMapping("/{id}")

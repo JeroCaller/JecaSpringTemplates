@@ -57,13 +57,14 @@ public class TestFileServiceImpl
 		TestFileServiceImpl, 
 		TestFileResponse, 
 		TestFileRequest, 
+		Integer,
 		Integer
 	> {
 	
 	private final TestFileRepository testFileRepository;
 	
 	@Value("${file.upload-dir}")
-	private final String uploadBaseDir;
+	private String uploadBaseDir;
 	
 	private Path uploadBaseDirPath;
 	
