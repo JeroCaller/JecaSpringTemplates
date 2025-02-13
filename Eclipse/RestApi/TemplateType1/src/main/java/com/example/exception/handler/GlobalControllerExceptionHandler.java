@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.example.dto.response.rest.CustomResponseCode;
 import com.example.dto.response.rest.RestResponse;
@@ -98,6 +99,7 @@ public class GlobalControllerExceptionHandler {
 		
 		log.error("=== 예기치 못한 에러가 발생했습니다. 다음 에러 메시지를 참고하세요. ===");
 		log.error(e.getMessage());
+		e.printStackTrace();
 		
 		return RestResponse.builder()
 			.responseCode(CustomResponseCode.UNKNOWN_ERROR)
@@ -137,6 +139,18 @@ public class GlobalControllerExceptionHandler {
 			.responseCode(CustomResponseCode.MEMBER_NOT_FOUND)
 			.uri(httpRequest.getRequestURI())
 			.data(e.getMessage())
+			.build()
+			.toResponse();
+	}
+	
+	@ExceptionHandler(value = NoResourceFoundException.class)
+	public ResponseEntity<Object> handleLogoutException(NoResourceFoundException e) {
+		
+		log.info("로그아웃 시 발생하는 예외입니다. 해당 예외 발생에도 로그아웃 자체는 잘됩니다.");
+		log.info(e.getMessage());
+		
+		return RestResponse.builder()
+			.uri("/auth/logout")
 			.build()
 			.toResponse();
 	}

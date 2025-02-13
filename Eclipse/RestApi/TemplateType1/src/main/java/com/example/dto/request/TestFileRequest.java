@@ -1,7 +1,5 @@
 package com.example.dto.request;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TestFileRequest {
 	
-	private MultipartFile mediaFile;
 	private String description;
 	
 }

@@ -1,5 +1,7 @@
 package com.example.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class TestMemberHistory extends BaseResponse {
 	
+	@JsonIgnore
 	private Integer id;
 	private String pastUsername;
 	private String newUsername;

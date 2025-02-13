@@ -19,7 +19,6 @@ public interface FileIOInterface<Service, RESP, REQ, BY, RANGE> extends ReadInte
 	 * 클라이언트로부터 넘어온 파일과 그 경로를 각각 서버 내 폴더 및 
 	 * DB에 저장한다. 
 	 * 
-	 * @param who - 업로드될 파일의 소유자 정보. 해당 소유자 정보로 파일이 저장된다.
 	 * @param files - 여러 개의 파일들의 업로드 허용.
 	 * @return - 작업 결과 성공 또는 실패, 또는 그 외 결과를 어떻게 표시할지 
 	 * 자유롭게 하기 위해 Object로 선언함. 
@@ -29,15 +28,13 @@ public interface FileIOInterface<Service, RESP, REQ, BY, RANGE> extends ReadInte
 	}
 	
 	/**
-	 * 클라이언트로부터 넘어온 파일 및 그 경로를 서버 내 폴더 및 
-	 * DB에 저장한다. 
-	 * 파일과 더불어 요청으로 넘어오는 추가 정보도 DB에 저장한다. 
+	 * 클라이언트로부터 파일과 그에 대한 정보를 받아 이를 저장한다. 
 	 * 
-	 * @param fileRequests - 여러 개의 파일 포함 정보들이 담긴 요청 DTO 객체의 리스트.
-	 * @return - 작업 결과 성공 또는 실패, 또는 그 외 결과를 어떻게 표시할지 
-	 * 자유롭게 하기 위해 Object로 선언함.
+	 * @param file
+	 * @param fileRequest - 파일 정보.
+	 * @return
 	 */
-	default Object uploadFilesWithAdditionalInfo(List<REQ> fileRequests) {
+	default Object uploadFileWithAdditionalInfo(MultipartFile file, REQ fileRequest) {
 		return null;
 	}
 	

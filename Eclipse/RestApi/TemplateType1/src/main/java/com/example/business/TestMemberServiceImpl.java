@@ -86,6 +86,7 @@ public class TestMemberServiceImpl implements UserCRUDInterface<
 		);
 		
 		TestMember willBeUpdatedMember = TestMember.builder()
+			.id(currentMember.getId())
 			.username(memberRequest.getUsername())
 			.password(encodedPassword)
 			.build();

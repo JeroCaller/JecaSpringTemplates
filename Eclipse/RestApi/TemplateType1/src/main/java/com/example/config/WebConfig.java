@@ -2,14 +2,21 @@ package com.example.config;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+	
+	private final OctetMessageConverter octetMessageConverter;
 	
 	@Value("${file.upload-dir}")
 	private String uploadBaseDir;
@@ -33,6 +40,14 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addResourceHandler(contextPath + "/**")
 			.addResourceLocations("file:" + fullPath + "/");
 		
+	}
+	
+	/**
+	 * 사용자 정의 메시지 컨버터를 추가하여 등록해준다.
+	 */
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		converters.add(octetMessageConverter);
 	}
 
 }

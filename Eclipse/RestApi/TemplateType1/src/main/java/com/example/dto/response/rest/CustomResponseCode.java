@@ -57,6 +57,11 @@ public enum CustomResponseCode {
 		"FILE_INFO_NOT_DELETED",
 		"DB 내 파일 정보 삭제 실패."
 	),
+	FILE_NOT_CREATED(
+		HttpStatus.INTERNAL_SERVER_ERROR, 
+		"FILE_NOT_CREATED", 
+		"요청된 파일의 서버 내 저장 실패."
+	),
 	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT_NOT_FOUND", "조회된 제품이 없습니다."),
 	PRODUCT_ALREADY_EXISTS(
 		HttpStatus.BAD_REQUEST, 

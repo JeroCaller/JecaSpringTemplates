@@ -1,7 +1,5 @@
 package com.example.controller;
 
-import java.util.List;
-
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.business.TestFileServiceImpl;
 import com.example.business.interf.FileIOInterface;
@@ -73,18 +73,37 @@ public class TestFileController {
 			.toResponse();
 	}
 	
-	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	/**
+	 * 
+	 * <div>
+	 * 참고) <br/>
+	 * 파일과 나머지 JSON 데이터들을 함께 매핑하여 업로드하려면 
+	 * MultipartFile 파라미터와 dto 파라미터 둘 다 <code>@RequestPart</code> 
+	 * 어노테이션을 사용해야한다고 한다. 
+	 * </div><br/>
+	 * 
+	 * 참고 사이트)<br/>
+	 * <ul>
+	 * <li>https://leeggmin.tistory.com/7</li>
+	 * </ul>
+	 * 
+	 * @param file
+	 * @param fileRequest
+	 * @return
+	 */
+	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Object> uploadFiles(
-		@RequestParam("files") List<TestFileRequest> fileRequests
+		@RequestPart(name = "file") MultipartFile file,
+		@RequestPart(name = "info", required = false) TestFileRequest fileRequest
 	) {
 		
-		TestFileResultResponse fileResult = (TestFileResultResponse) fileService
-			.uploadFilesWithAdditionalInfo(fileRequests);
+		TestFileResponse fileResponse = (TestFileResponse) fileService
+			.uploadFileWithAdditionalInfo(file, fileRequest);
 		
 		return RestResponse.builder()
 			.responseCode(CustomResponseCode.FILE_CREATED)
 			.uri(httpRequest.getRequestURI())
-			.fileResult(fileResult)
+			.data(fileResponse)
 			.build()
 			.toResponse();
 	}

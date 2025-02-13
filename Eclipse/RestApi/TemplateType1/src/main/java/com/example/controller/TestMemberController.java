@@ -3,6 +3,7 @@ package com.example.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +46,21 @@ public class TestMemberController {
 			.responseCode(CustomResponseCode.READ_SUCCESS)
 			.uri(httpRequest.getRequestURI())
 			.data(memberResponse)
+			.build()
+			.toResponse();
+	}
+	
+	@GetMapping("/{username}")
+	public ResponseEntity<Object> searchUsername(
+		@PathVariable("username") String username
+	) {
+		
+		boolean result = memberService.exists(username);
+		
+		return RestResponse.builder()
+			.responseCode(CustomResponseCode.READ_SUCCESS)
+			.uri(httpRequest.getRequestURI())
+			.data(result)
 			.build()
 			.toResponse();
 	}

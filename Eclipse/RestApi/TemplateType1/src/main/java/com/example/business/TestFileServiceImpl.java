@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.advice.annotation.AuthChecker;
 import com.example.advice.annotation.ExcludeFromAOP;
@@ -29,6 +30,7 @@ import com.example.data.repository.TestFileRepository;
 import com.example.dto.request.TestFileRequest;
 import com.example.dto.response.TestFileResponse;
 import com.example.dto.response.TestFileResultResponse;
+import com.example.exception.classes.FileCreationFailedException;
 import com.example.exception.classes.FileInfoInDBNotDeletedException;
 import com.example.exception.classes.FileNotDeletedException;
 import com.example.exception.classes.FileNotFoundOrReadableException;
@@ -117,63 +119,51 @@ public class TestFileServiceImpl
 	}
 	
 	@Override
-	public Object uploadFilesWithAdditionalInfo(List<TestFileRequest> fileRequests) {
+	public TestFileResponse uploadFileWithAdditionalInfo(
+		MultipartFile file, 
+		TestFileRequest fileRequest
+	) {
 		
-		TestFileResultResponse fileResult = new TestFileResultResponse();
 		TestMember currentMember = (TestMember) AuthUtil.getCurrentUserInfo();
 		
-		for (TestFileRequest request : fileRequests) {
-			
-			// 파일을 서버에 업로드.
-			
-			// 파일 내용이 다르나 서버 내에 똑같은 파일명이 존재할 경우를 방지하기 위해 
-			// 클라이언트가 전달한 파일명에 부가 정보를 추가한다. 
-			// 여기서는 현재 시간이란 정보를 이용한다. 
-			String fileName = System.currentTimeMillis() // 현재 시각을 밀리초로 반환.
-				+ "_" 
-				+ request.getMediaFile().getOriginalFilename(); // 멀티파일의 원래 파일명.
-			
-			// 부모 디렉토리 경로와 방금 생성한 파일명을 합쳐 최종 경로를 생성함.
-			Path filePath = uploadBaseDirPath.resolve(fileName); 
-			
-			try {
-				// 파일을 특정 경로로 복사 하기. 
-				// 이미 동일 파일 존재 시 덮어쓰기
-				// Files.copy() : InputStream으로부터 파일을 읽어 filePath 위치에 
-				// 파일을 저장함. 
-				// StandardCopyOption.REPLACE_EXISTING : 덮어쓰기 옵션
-				Files.copy(
-					request.getMediaFile().getInputStream(), 
-					filePath, 
-					StandardCopyOption.REPLACE_EXISTING
-				);
-			} catch (IOException e) {
-				// 업로드 실패한 파일명과 실패 원인 에러 메시지를 기록.
-				// 다른 파일들은 계속 업로드할 수 있도록 예외를 던지지 않음. 
-				// 예외가 발생한 파일명 : 에러 메시지
-				fileResult.getFailedPaths().put(
-					request.getMediaFile().getOriginalFilename(), 
-					e.getMessage()
-				);
-				// 여기서 파일 업로드 작업에 실패했으므로 다음 파일로 건너뛴다.
-				continue;
-			}
-			
-			// 파일 정보를 DB에 저장.
-			TestFile willBeSavedFile = TestFile.builder()
-				.path(filePath.toString())
-				.description(request.getDescription())
-				.member(currentMember)
-				.build();
-			testFileRepository.save(willBeSavedFile);
-			
-			// 파일 저장 및 DB 저장을 모두 완료했으므로 이를 성공으로 기록
-			fileResult.getSucceededFileNames()
-				.add(request.getMediaFile().getOriginalFilename());
+		// 파일을 서버에 업로드.
+		
+		// 파일 내용이 다르나 서버 내에 똑같은 파일명이 존재할 경우를 방지하기 위해 
+		// 클라이언트가 전달한 파일명에 부가 정보를 추가한다. 
+		// 여기서는 현재 시간이란 정보를 이용한다. 
+		String fileName = System.currentTimeMillis() // 현재 시각을 밀리초로 반환.
+			+ "_" 
+			+ file.getOriginalFilename(); // 멀티파일의 원래 파일명.
+					
+		// 부모 디렉토리 경로와 방금 생성한 파일명을 합쳐 최종 경로를 생성함.
+		Path filePath = uploadBaseDirPath.resolve(fileName); 
+		
+		try {
+			// 파일을 특정 경로로 복사 하기. 
+			// 이미 동일 파일 존재 시 덮어쓰기
+			// Files.copy() : InputStream으로부터 파일을 읽어 filePath 위치에 
+			// 파일을 저장함. 
+			// StandardCopyOption.REPLACE_EXISTING : 덮어쓰기 옵션
+			Files.copy(
+				file.getInputStream(), 
+				filePath, 
+				StandardCopyOption.REPLACE_EXISTING
+			);
+		} catch (IOException e) {
+			throw new FileCreationFailedException(e.getMessage());
 		}
 		
-		return fileResult;
+		// 파일 정보를 DB에 저장.
+		TestFile willBeSavedFile = TestFile.builder()
+			.path(filePath.toString())
+			.description(fileRequest.getDescription())
+			.member(currentMember)
+			.build();
+		TestFile savedFile = testFileRepository.save(willBeSavedFile);
+		
+		return TestFileResponse.toDto(savedFile);
 	}
+	
 
 	@Override
 	public Object downloadOneFileBy(Integer field) {
