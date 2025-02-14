@@ -3,6 +3,7 @@ package com.example.exception.handler;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -151,6 +152,22 @@ public class GlobalControllerExceptionHandler {
 		
 		return RestResponse.builder()
 			.uri("/auth/logout")
+			.build()
+			.toResponse();
+	}
+	
+	/**
+	 * 자격 증명 실패 시 발생하는 예외 처리.
+	 * 
+	 * @param e
+	 * @return
+	 */
+	@ExceptionHandler(value = BadCredentialsException.class)
+	public ResponseEntity<Object> handleCredentialsException(BadCredentialsException e) {
+		
+		return RestResponse.builder()
+			.responseCode(CustomResponseCode.LOGIN_FAILED)
+			.uri(httpRequest.getRequestURI())
 			.build()
 			.toResponse();
 	}

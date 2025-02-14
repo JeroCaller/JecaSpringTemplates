@@ -77,7 +77,12 @@ public enum CustomResponseCode {
 		HttpStatus.BAD_REQUEST, 
 		"VALIDATION_FAILED", 
 		"입력된 데이터가 유효하지 않습니다."
-	), 
+	),
+	LOGIN_FAILED(
+		HttpStatus.BAD_REQUEST, 
+		"LOGIN_FAILED", 
+		"로그인에 실패했습니다. 로그인 정보를 정확히 입력했는지 확인해주세요."
+	),
 	
 	// 서버 내 에러 시 코드
 	AOP_ERROR(

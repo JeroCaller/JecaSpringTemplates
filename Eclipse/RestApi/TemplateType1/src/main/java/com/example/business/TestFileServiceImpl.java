@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -102,6 +103,22 @@ public class TestFileServiceImpl
 		}
 		
 		return TestFileResponse.toDto(fileEntity);
+	}
+	
+	@Override
+	public List<TestFileResponse> getAllInList() {
+		
+		TestMember currentMember = (TestMember) AuthUtil.getCurrentUserInfo();
+		
+		List<TestFile> files = testFileRepository.findAllByMember(currentMember);
+		
+		if (ListUtil.isEmpty(files)) {
+			throw new TestFileNotFoundException();
+		}
+		
+		return files.stream()
+			.map(TestFileResponse :: toDto)
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -282,10 +299,6 @@ public class TestFileServiceImpl
 		
 		TestMember currentMember = (TestMember) AuthUtil.getCurrentUserInfo();
 		List<TestFile> files = testFileRepository.findAllByMember(currentMember);
-		
-		if (ListUtil.isEmpty(files)) {
-			throw new NoFileToDeleteException();
-		}
 		
 		for (TestFile file : files) {
 			Path filePath = Paths.get(file.getPath());

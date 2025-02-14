@@ -57,18 +57,22 @@ public class TestFileController {
 	
 	@GetMapping
 	public ResponseEntity<Object> getAllFiles(
-		@RequestParam("startPage") int startPage, 
-		@RequestParam("size") int size
+		@RequestParam(name = "startPage", required = false) Integer startPage, 
+		@RequestParam(name = "size", required = false) Integer size
 	) {
 		
-		Pageable pageRequest = PageUtil.toOneBasedPageable(startPage, size);
-		Page<TestFileResponse> pagedFiles 
-			= fileService.getAllInPage(pageRequest);
+		Object result = null;
+		if (startPage == null || size == null) {
+			result = fileService.getAllInList();
+		} else {
+			Pageable pageRequest = PageUtil.toOneBasedPageable(startPage, size);
+			result = fileService.getAllInPage(pageRequest);
+		}
 		
 		return RestResponse.builder()
 			.responseCode(CustomResponseCode.READ_SUCCESS)
 			.uri(httpRequest.getRequestURI())
-			.data(pagedFiles)
+			.data(result)
 			.build()
 			.toResponse();
 	}
@@ -91,7 +95,10 @@ public class TestFileController {
 	 * @param fileRequest
 	 * @return
 	 */
-	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping(consumes = {
+		MediaType.MULTIPART_FORM_DATA_VALUE, 
+		MediaType.APPLICATION_JSON_VALUE
+	})
 	public ResponseEntity<Object> uploadFiles(
 		@RequestPart(name = "file") MultipartFile file,
 		@RequestPart(name = "info", required = false) TestFileRequest fileRequest

@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 public class TestMemberResponse extends BaseResponse {
 	
 	private int id;
-	private String nickname;
+	private String username;
 	
 	@JsonIgnore
 	private String password;
@@ -28,7 +28,7 @@ public class TestMemberResponse extends BaseResponse {
 		
 		return TestMemberResponse.builder()
 			.id(entity.getId())
-			.nickname(entity.getUsername())
+			.username(entity.getUsername())
 			.password(entity.getPassword())
 			.createdAt(entity.getCreatedAt())
 			.updatedAt(entity.getUpdatedAt())

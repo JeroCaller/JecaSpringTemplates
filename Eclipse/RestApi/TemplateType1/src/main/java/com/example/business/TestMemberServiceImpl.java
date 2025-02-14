@@ -10,6 +10,7 @@ import com.example.advice.annotation.AuthChecker;
 import com.example.advice.annotation.ExcludeFromAOP;
 import com.example.advice.annotation.InvalidateAuth;
 import com.example.advice.annotation.RequestDTO;
+import com.example.advice.annotation.TestForAOPInMethod;
 import com.example.advice.annotation.UpdateAuth;
 import com.example.business.interf.FileIOInterface;
 import com.example.business.interf.UserCRUDInterface;
@@ -76,6 +77,7 @@ public class TestMemberServiceImpl implements UserCRUDInterface<
 	
 	@Override
 	@UpdateAuth
+	@TestForAOPInMethod
 	public Object update(@RequestDTO TestMemberRequest memberRequest) {
 		
 		TestMember currentMember = (TestMember) AuthUtil.getCurrentUserInfo();

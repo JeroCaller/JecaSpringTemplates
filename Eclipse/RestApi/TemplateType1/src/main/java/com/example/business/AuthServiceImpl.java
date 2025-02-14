@@ -61,14 +61,22 @@ public class AuthServiceImpl implements AuthInterface<
 		// 인증 정보가 포함된 세션을 서버에 영속화하여 다른 request가 와도 인증 정보를 유지하도록 한다.
 		// 이 코드를 사용하지 않으면 인증을 하더라도 그 인증 정보가 유지되지 않아서 
 		// 다른 request가 오면 다시 익명 사용자로 변경된다는 문제가 발생한다. 
-		securityContextRepository.saveContext(securityContext, httpRequest, httpResponse);
+		securityContextRepository.saveContext(
+			securityContext, 
+			httpRequest, 
+			httpResponse
+		);
 		
 		// 세션에 저장된 유저 정보를 DTO로 변환하여 반환.
-		return TestMemberResponse.toDto((TestMember) AuthUtil.getCurrentUserInfo());
+		return TestMemberResponse
+			.toDto((TestMember) AuthUtil.getCurrentUserInfo());
 	}
 
 	@Override
-	public void logout(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+	public void logout(
+		HttpServletRequest httpRequest, 
+		HttpServletResponse httpResponse
+	) {
 		
 		logoutHandler.logout(httpRequest, httpResponse, AuthUtil.getAuth());
 
