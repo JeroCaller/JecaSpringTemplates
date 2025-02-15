@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TestProductResponse {
 	
+	private Integer id;
 	private String name;
 	private String category;
 	private String description;
@@ -22,6 +23,7 @@ public class TestProductResponse {
 	public static TestProductResponse toDto(TestProduct entity) {
 		
 		return TestProductResponse.builder()
+			.id(entity.getId())
 			.name(entity.getName())
 			.category(entity.getCategory())
 			.description(entity.getDescription())
