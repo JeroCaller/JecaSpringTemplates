@@ -11,5 +11,12 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UpdateAuth {
-
+	
+	/**
+	 * 회원 정보 요청 DTO 타입을 넣는다. AuthInterface.login() 메서드의 
+	 * 첫 번째 파라미터의 타입과 동일해야 한다. 
+	 * 
+	 * @return
+	 */
+	Class<?> DtoType();
 }

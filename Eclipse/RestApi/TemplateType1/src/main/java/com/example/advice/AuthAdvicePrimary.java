@@ -10,7 +10,6 @@ import com.example.business.AuthServiceImpl;
 import com.example.business.interf.AuthInterface;
 import com.example.dto.request.TestMemberRequest;
 import com.example.dto.response.TestMemberResponse;
-import com.example.exception.aop.classes.TestTypeCastingException;
 import com.example.util.AuthUtil;
 
 import jakarta.servlet.http.HttpServletRequest;

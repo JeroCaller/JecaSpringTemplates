@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.business.TestService;
+import com.example.dto.request.TestProductRequest;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/test")
 @Slf4j
 public class TestController {
+	
+	private final TestService testService;
 	
 	@Value("${file.upload-dir}")
 	private String uploadBaseDir;
@@ -39,5 +44,20 @@ public class TestController {
 		log.info(contextPath + "/**");
 		log.info("fullPath: {}", fullPath);
 	}
-
+	
+	@GetMapping("/aop")
+	public void getMethodName() {
+		
+		TestProductRequest request = TestProductRequest.builder()
+			.name("테스트")
+			.category("테스트")
+			.description("테스트입니다.")
+			.amount(1)
+			.price(1000)
+			.build();
+		
+		testService.aopTest(request, "good");
+		
+	}
+	
 }
