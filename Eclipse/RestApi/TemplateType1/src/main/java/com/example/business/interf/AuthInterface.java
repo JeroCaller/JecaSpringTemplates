@@ -6,11 +6,10 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * 인증(로그인) 서비스 추상 인터페이스
  * 
- * @param <Service> - 이 인터페이스를 구현할 클래스명
  * @param <RES> - 응답 DTO 클래스 타입
  * @param <REQ> - 요청 DTO 클래스 타입
  */
-public interface AuthInterface<Service, RES, REQ> {
+public interface AuthInterface<RES, REQ> {
 	
 	/**
 	 * 로그인 기능

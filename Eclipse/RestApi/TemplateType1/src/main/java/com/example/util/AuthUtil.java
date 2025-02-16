@@ -14,8 +14,7 @@ import com.example.exception.classes.NotAuthenticatedUserException;
 public class AuthUtil {
 	
 	public static Authentication getAuth() {
-		return SecurityContextHolder.getContext()
-			.getAuthentication();
+		return SecurityContextHolder.getContext().getAuthentication();
 	}
 	
 	/**
@@ -23,7 +22,9 @@ public class AuthUtil {
 	 * 
 	 * @return 회원 응답 DTO 타입.
 	 */
-	public static UserDetails getCurrentUserInfo() throws NotAuthenticatedUserException {
+	public static UserDetails getCurrentUserInfo() 
+		throws NotAuthenticatedUserException 
+	{
 		
 		Authentication auth = SecurityContextHolder.getContext()
 			.getAuthentication();

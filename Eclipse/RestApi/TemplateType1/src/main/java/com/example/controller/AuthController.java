@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.business.AuthServiceImpl;
 import com.example.business.interf.AuthInterface;
 import com.example.dto.request.TestMemberRequest;
 import com.example.dto.response.TestMemberResponse;
@@ -26,7 +25,7 @@ public class AuthController {
 	private final HttpServletResponse httpResponse;
 	
 	private final AuthInterface<
-		AuthServiceImpl, TestMemberResponse, TestMemberRequest
+		TestMemberResponse, TestMemberRequest
 	> authService;
 	
 	@PostMapping("/login")

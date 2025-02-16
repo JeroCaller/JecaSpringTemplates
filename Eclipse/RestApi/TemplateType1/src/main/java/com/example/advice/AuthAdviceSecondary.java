@@ -13,7 +13,6 @@ import com.example.business.AuthServiceImpl;
 import com.example.business.interf.AuthInterface;
 import com.example.dto.request.TestMemberRequest;
 import com.example.dto.response.TestMemberResponse;
-import com.example.exception.aop.classes.TestTypeCastingException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@Order(1)
+@Order(2)
 public class AuthAdviceSecondary {
 	
 	private final HttpServletRequest httpRequest;
@@ -41,7 +40,6 @@ public class AuthAdviceSecondary {
 	 * <p>
 	 * <code>@UpdateAuth</code> 어노테이션은 대상 메서드에 적용한다. 
 	 * </p>
-
 	 * </div><br/>
 	 * 
 	 * @param joinPoint

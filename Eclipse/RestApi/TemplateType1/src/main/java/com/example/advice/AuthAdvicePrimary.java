@@ -6,29 +6,15 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.example.business.AuthServiceImpl;
-import com.example.business.interf.AuthInterface;
-import com.example.dto.request.TestMemberRequest;
-import com.example.dto.response.TestMemberResponse;
 import com.example.util.AuthUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Aspect
 @Component
-@RequiredArgsConstructor
 @Slf4j
-@Order(2)
+@Order(1)
 public class AuthAdvicePrimary {
-	
-	private final HttpServletRequest httpRequest;
-	private final HttpServletResponse httpResponse;
-	private final AuthInterface<
-		AuthServiceImpl, TestMemberResponse, TestMemberRequest
-	> authService;
 	
 	/**
 	 * 현재 사용자가 인증되었는지 여부를 체크한다. 

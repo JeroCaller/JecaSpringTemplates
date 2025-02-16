@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.business.TestMemberServiceImpl;
 import com.example.business.interf.UserCRUDInterface;
 import com.example.dto.request.TestMemberRequest;
 import com.example.dto.response.TestMemberResponse;
@@ -23,7 +22,7 @@ public class TestMemberController {
 	
 	private final HttpServletRequest httpRequest;
 	private final UserCRUDInterface<
-		TestMemberServiceImpl, TestMemberResponse, TestMemberRequest
+		TestMemberResponse, TestMemberRequest
 	> memberService;
 	
 	@GetMapping("/{username}")

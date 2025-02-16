@@ -2,6 +2,7 @@ package com.example.business;
 
 import java.util.Optional;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.example.advice.annotation.AuthChecker;
 import com.example.advice.annotation.ExcludeFromAOP;
 import com.example.advice.annotation.InvalidateAuth;
-import com.example.advice.annotation.RequestDTO;
 import com.example.advice.annotation.UpdateAuth;
 import com.example.business.interf.FileIOInterface;
 import com.example.business.interf.UserCRUDInterface;
@@ -28,17 +28,18 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@AuthChecker
 @Transactional
+@Primary
+@AuthChecker
 public class TestMemberServiceImpl implements UserCRUDInterface<
-	TestMemberServiceImpl, TestMemberResponse, TestMemberRequest
+	TestMemberResponse, TestMemberRequest
 > {
 	
 	private final TestMemberRepository testMemberRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final CustomUserDetailsService customUserDetailsService;
 	private final FileIOInterface<
-		TestFileServiceImpl, TestFileResponse, TestFileRequest, Integer, Integer
+		TestFileResponse, TestFileRequest, Integer, Integer
 	> fileService;
 	
 	@Override

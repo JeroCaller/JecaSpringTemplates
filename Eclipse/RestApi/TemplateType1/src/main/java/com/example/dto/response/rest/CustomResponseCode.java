@@ -85,11 +85,6 @@ public enum CustomResponseCode {
 	),
 	
 	// 서버 내 에러 시 코드
-	AOP_ERROR(
-		HttpStatus.INTERNAL_SERVER_ERROR, 
-		"AOP_ERROR", 
-		"서버 내 AOP에서 문제 발생. 자세한 사항은 serverErrorMsg 프로퍼티 참조."
-	),
 	INTERNAL_SERVER_ERROR(
 		HttpStatus.INTERNAL_SERVER_ERROR, 
 		"INTERNAL_SERVER_ERROR", 

@@ -12,7 +12,7 @@ package com.example.business.interf;
  * @param <RESP> - 회원 정보 응답 DTO 클래스
  * @param <REQ> - 회원 정보 요청 DTO 클래스
  */
-public interface UserCRUDInterface<Service, RESP, REQ> {
+public interface UserCRUDInterface<RESP, REQ> {
 	
 	/**
 	 * 현재 인증된 사용자 정보 반환.

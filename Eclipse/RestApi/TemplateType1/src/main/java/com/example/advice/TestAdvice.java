@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.example.advice.annotation.RequestDTO;
 import com.example.advice.annotation.TestForAOPInMethod;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Order(3)
 public class TestAdvice {
 	
-	//@Around("@annotation(com.example.advice.annotation.TestForAOPInMethod)")
+	@Around("@annotation(com.example.advice.annotation.TestForAOPInMethod)")
 	public Object testAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
 		
 		log.info("=== testAdvice 호출됨 ===");

@@ -8,12 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
  * 파일 업로드 및 다운로드를 구현하기 위한 인터페이스.
  * 현재 인증된 사용자만을 대상으로 실행. 
  * 
- * @param <Service> - 서비스 구현 클래스. 
  * @param <RESP> - 응답용 DTO 클래스. 
  * @param <REQ> - 요청용 DTO 클래스.
  * @param <BY> - 조건 검색용 데이터의 타입. 
  */
-public interface FileIOInterface<Service, RESP, REQ, BY, RANGE> extends ReadInterface<RESP, BY, RANGE> {
+public interface FileIOInterface<RESP, REQ, BY, RANGE> extends ReadInterface<RESP, BY, RANGE> {
 	
 	/**
 	 * 클라이언트로부터 넘어온 파일과 그 경로를 각각 서버 내 폴더 및 

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,6 @@ import com.example.exception.classes.FileInfoInDBNotDeletedException;
 import com.example.exception.classes.FileNotDeletedException;
 import com.example.exception.classes.FileNotFoundOrReadableException;
 import com.example.exception.classes.IORuntimeException;
-import com.example.exception.classes.NoFileToDeleteException;
 import com.example.exception.classes.TestFileNotFoundException;
 import com.example.exception.classes.TestOtherMemberFileAccessException;
 import com.example.util.AuthUtil;
@@ -54,10 +54,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Primary
 @AuthChecker
 public class TestFileServiceImpl 
 	implements FileIOInterface<
-		TestFileServiceImpl, 
 		TestFileResponse, 
 		TestFileRequest, 
 		Integer,

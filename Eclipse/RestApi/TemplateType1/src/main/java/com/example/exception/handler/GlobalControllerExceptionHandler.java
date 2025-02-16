@@ -12,7 +12,6 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.example.dto.response.rest.CustomResponseCode;
 import com.example.dto.response.rest.RestResponse;
-import com.example.exception.BaseAOPException;
 import com.example.exception.BaseCustomException;
 import com.example.exception.BaseInternalServerException;
 import com.example.util.ValidationUtil;
@@ -39,25 +38,6 @@ public class GlobalControllerExceptionHandler {
 	 */
 	@ExceptionHandler(value = BaseCustomException.class)
 	public ResponseEntity<Object> handleCustomException(BaseCustomException e) {
-		
-		return RestResponse.builder()
-			.responseCode(e.getResponseCode())
-			.uri(httpRequest.getRequestURI())
-			.build()
-			.toResponse();
-	}
-	
-	/**
-	 * 서버 내 AOP에서 발생한 예외 처리.
-	 * 
-	 * @param e
-	 * @return
-	 */
-	@ExceptionHandler(value = BaseAOPException.class)
-	public ResponseEntity<Object> handleAOPException(BaseAOPException e) {
-		
-		log.error("=== 서버 내 AOP에서 예기치 못한 에러가 발생했습니다. 다음 에러 메시지를 참고하세요. ===");
-		log.error(e.getMessage());
 		
 		return RestResponse.builder()
 			.responseCode(e.getResponseCode())
