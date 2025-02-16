@@ -29,7 +29,7 @@ public class AuthAdviceSecondary {
 	private final HttpServletRequest httpRequest;
 	private final HttpServletResponse httpResponse;
 	private final AuthInterface<
-		AuthServiceImpl, TestMemberResponse, TestMemberRequest
+		TestMemberResponse, TestMemberRequest
 	> authService;
 	
 	/**
