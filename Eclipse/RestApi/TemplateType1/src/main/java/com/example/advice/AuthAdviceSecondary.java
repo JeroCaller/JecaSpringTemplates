@@ -9,7 +9,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.example.advice.annotation.UpdateAuth;
-import com.example.business.AuthServiceImpl;
 import com.example.business.interf.AuthInterface;
 import com.example.dto.request.TestMemberRequest;
 import com.example.dto.response.TestMemberResponse;
